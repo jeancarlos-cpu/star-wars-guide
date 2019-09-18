@@ -1,0 +1,10 @@
+.particles {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: rgb(0, 0, 0);
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.2974137931034483) 0%, rgba(25, 25, 22, 0.7112068965517242) 24%, rgba(4, 2, 41, 1) 90%);
+}

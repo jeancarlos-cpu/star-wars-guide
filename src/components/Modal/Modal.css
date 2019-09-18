@@ -1,0 +1,33 @@
+.Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(10px);
+    background-color: rgb(255, 255, 255, 0.1);
+}
+
+.imgmodal {
+    height: 520px;
+    width: auto;
+}
+
+.modal {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    vertical-align: middle;
+}
+
+li {
+    color: black;
+    list-style-type: none;
+}
+
+h2 {
+    color: black;
+    font-family: 'star1';
+}

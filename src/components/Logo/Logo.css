@@ -1,0 +1,11 @@
+.logo {
+    text-shadow: 2px 2px 2px rgb(225, 226, 212);
+
+    text-align: center;
+    font-family: "star1";
+}
+
+.logo p {
+    margin: 5px 0px;
+    color: #FFE81F;
+}
