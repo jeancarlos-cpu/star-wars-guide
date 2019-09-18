@@ -24,7 +24,7 @@ export default class CharacterModal extends React.Component {
         this.state = {
             modalIsOpen: false,
             general: [],
-            species: {},
+            species: [],
             homeworld: [],
             vehicles: [],
             starships: [],
@@ -38,31 +38,43 @@ export default class CharacterModal extends React.Component {
     openModal() {
         this.setState({ modalIsOpen: true });
         const data = this.props.item;
-        Promise.resolve(this.fetchData(data.species)).then(e => {
-            const { name, classification, designation, average_lifespan, language } = e;
-            this.setState(
-                {
-                    species: {
-                        name,
-                        classification,
-                        designation,
-                        average_lifespan,
-                        language,
+        Promise.resolve(this.fetchData(data.species))
+            .then(e => {
+                const { name, classification, designation, average_lifespan, language } = e;
+                this.setState(
+                    {
+                        species: [{
+                            name,
+                            classification,
+                            designation,
+                            average_lifespan,
+                            language,
+                        }]
                     }
+                )
+            });
+
+        Promise.all(data.vehicles.map(e => this.fetchData(e)))
+            .then(response => response.map(vehicle => {
+                const { name, model, manufacturer, crew, passengers } = vehicle;
+                return {
+                    name,
+                    model,
+                    manufacturer,
+                    crew,
+                    passengers
                 }
-            )
-        });
-
-        const films = data.films.map(e => this.fetchData(e));
+            })).then(vehicles => this.setState({ vehicles }));
 
 
+        // const films = data.films.map(e => this.fetchData(e));
+        // Promise.all(films).then(console.log);
 
-        Promise.all(films).then(console.log);
-        const vehicles = data.vehicles.map(e => this.fetchData(e));
-        Promise.all(vehicles).then(console.log);
-        const starships = data.vehicles.map(e => this.fetchData(e));
-        Promise.all(starships).then(console.log);
-        Promise.resolve(this.fetchData(data.homeworld)).then(console.log);
+
+
+        // const starships = data.vehicles.map(e => this.fetchData(e));
+        // Promise.all(starships).then(console.log);
+        // Promise.resolve(this.fetchData(data.homeworld)).then(console.log);
     }
 
     afterOpenModal() {
@@ -82,12 +94,37 @@ export default class CharacterModal extends React.Component {
     }
 
     componentDidMount() {
-        const data = (this.props.item);
-        this.setState({ general: [data.height, data.mass, data.hair_color, data.skin_color, data.eye_color, data.birth_year, data.gender] });
+        const { height, mass, hair_color, skin_color, eye_color, birth_year, gender } = (this.props.item);
+        this.setState({
+            general: [{
+                height,
+                mass,
+                hair_color,
+                skin_color,
+                eye_color,
+                birth_year,
+                gender,
+            }]
+        });
+    }
+
+    renderList = (data) => {
+        const list = data.map(data => {
+            return (
+                Object.entries(data).map((info, i) => {
+                    return (
+                        <li>{info[0].charAt(0).toUpperCase() + info[0].slice(1).replace(/_/g, ' ')}: {info[1]}</li>
+                    )
+                }))
+        })
+        return list;
+    }
+
+    isObjEmpty = (obj) => {
+        return Object.entries(obj).length === 0 && obj.constructor === Object;
     }
 
     render() {
-        const generalKey = ['Height (m)', 'Mass (kg)', 'Hair color', 'Skin color', 'Eye color', 'Birth year', 'Gender'];
         const image = this.props.image;
 
         return (
@@ -112,14 +149,10 @@ export default class CharacterModal extends React.Component {
                             <ul>
                                 <h2>{this.props.item.name}</h2>
                                 {
-                                    this.state.general.length ?
-                                        generalKey.map((e, i) => {
-                                            return (
-                                                <li>{generalKey[i]}: {this.state.general[i]}</li>
-                                            )
-                                        })
-                                        :
+                                    this.isObjEmpty(this.state.general) ?
                                         <li>Loading</li>
+                                        :
+                                        this.renderList(this.state.general)
                                 }
                             </ul>
                         </div>
@@ -127,15 +160,32 @@ export default class CharacterModal extends React.Component {
                             <ul>
                                 <h2>{"Species"}</h2>
                                 {
-                                    this.state.species ?
-                                        Object.entries(this.state.species).map((info, i) => {
-                                            return (
-                                            <li>{info[0].charAt(0).toUpperCase() + info[0].slice(1).replace(/_/g, ' ')}: {info[1]}</li>
-                                                )
-                                        })
-                                        :
+                                    this.isObjEmpty(this.state.species) ?
                                         <li>Loading</li>
+                                        :
+                                        this.renderList(this.state.species)
                                 }
+                            </ul>
+                        </div>
+                        <div>
+                            <ul>
+                                <h2>{"vehicles"}</h2>
+                                {
+                                    !this.state.vehicles.length ?
+                                        <li>Loading</li>
+                                        :
+                                        this.state.vehicles.map(data => {
+                                            return (
+                                                Object.entries(data).map((info, i) => {
+                                                    return (
+                                                        <li>{info[0].charAt(0).toUpperCase() + info[0].slice(1).replace(/_/g, ' ')}: {info[1]}</li>
+                                                    )
+                                                }))
+                                        })
+                                     
+                                }
+
+
                             </ul>
                         </div>
                     </div>
