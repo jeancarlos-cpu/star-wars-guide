@@ -1,7 +1,14 @@
 import React from 'react';
 import Modal from 'react-modal';
 import './Modal.css';
-import { promises } from 'dns';
+
+/* faltam filmes e naves.
+organizar as naves e os veiculos em tabelas.
+colocar borda na imagem.
+colocar uma animacao no loading.
+mudar a fonte dos itens.
+remover o titulo de veiculo e nave se nao houver.
+ */
 
 const customStyles = {
     content: {
@@ -20,7 +27,6 @@ Modal.setAppElement('#root')
 export default class CharacterModal extends React.Component {
     constructor() {
         super();
-
         this.state = {
             modalIsOpen: false,
             general: [],
@@ -37,6 +43,7 @@ export default class CharacterModal extends React.Component {
 
     openModal() {
         this.setState({ modalIsOpen: true });
+
         const data = this.props.item;
         Promise.resolve(this.fetchData(data.species))
             .then(e => {
@@ -64,13 +71,11 @@ export default class CharacterModal extends React.Component {
                     crew,
                     passengers
                 }
-            })).then(vehicles => this.setState({ vehicles }));
-
+            })).then(vehicles => this.setState({ vehicles }))
+            .finally(this.state.vehicles.length === 0 && this.setState({ vehicles: null }));
 
         // const films = data.films.map(e => this.fetchData(e));
         // Promise.all(films).then(console.log);
-
-
 
         // const starships = data.vehicles.map(e => this.fetchData(e));
         // Promise.all(starships).then(console.log);
@@ -149,7 +154,7 @@ export default class CharacterModal extends React.Component {
                             <ul>
                                 <h2>{this.props.item.name}</h2>
                                 {
-                                    this.isObjEmpty(this.state.general) ?
+                                    this.state.species.general === 0 ?
                                         <li>Loading</li>
                                         :
                                         this.renderList(this.state.general)
@@ -160,7 +165,7 @@ export default class CharacterModal extends React.Component {
                             <ul>
                                 <h2>{"Species"}</h2>
                                 {
-                                    this.isObjEmpty(this.state.species) ?
+                                    this.state.species.length === 0 ?
                                         <li>Loading</li>
                                         :
                                         this.renderList(this.state.species)
@@ -171,7 +176,7 @@ export default class CharacterModal extends React.Component {
                             <ul>
                                 <h2>{"vehicles"}</h2>
                                 {
-                                    !this.state.vehicles.length ?
+                                    this.state.vehicles === null ?
                                         <li>Loading</li>
                                         :
                                         this.state.vehicles.map(data => {
