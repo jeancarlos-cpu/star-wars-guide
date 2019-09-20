@@ -18,8 +18,9 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     vertical-align: middle;
+    color: black;
 }
 
 li {
@@ -30,4 +31,49 @@ li {
 h2 {
     color: black;
     font-family: 'star1';
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+.table td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table tr:hover {
+    background-color: #ddd;
+}
+
+.table th {
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.table-div {
+    display: block;
+}
+
+.transpose-table tr {
+    display: inline-block;
+    word-break: break-word;
+}
+
+.transpose-table th, .transpose-table td {
+    display: block;
+    word-break: break-word;
+}
+
+.group-info{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:space-around;
+
 }

@@ -4,7 +4,6 @@ import Background from '../components/Background/Background';
 import Logo from '../components/Logo/Logo';
 import CardList from '../components/CardList/CardList';
 import SearchBar from '../components/SearchBar/SearchBar';
-import CharacterModal from '../components/Modal/Modal';
 
 class App extends Component {
 

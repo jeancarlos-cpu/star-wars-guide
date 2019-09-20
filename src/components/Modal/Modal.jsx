@@ -74,6 +74,21 @@ export default class CharacterModal extends React.Component {
             })).then(vehicles => this.setState({ vehicles }))
             .finally(this.state.vehicles.length === 0 && this.setState({ vehicles: null }));
 
+
+        Promise.all(data.starships.map(e => this.fetchData(e)))
+            .then(response => response.map(starships => {
+                const { name, model, manufacturer, crew, passengers } = starships;
+                return {
+                    name,
+                    model,
+                    manufacturer,
+                    crew,
+                    passengers
+                }
+            })).then(starships => this.setState({ starships }))
+            .finally(this.state.starships.length === 0 && this.setState({ starships: null }));
+
+
         // const films = data.films.map(e => this.fetchData(e));
         // Promise.all(films).then(console.log);
 
@@ -114,6 +129,7 @@ export default class CharacterModal extends React.Component {
     }
 
     renderList = (data) => {
+
         const list = data.map(data => {
             return (
                 Object.entries(data).map((info, i) => {
@@ -123,6 +139,44 @@ export default class CharacterModal extends React.Component {
                 }))
         })
         return list;
+    }
+
+    renderTable = (data, title) => {
+        if (data === null) {
+            return (
+                <div>
+                    <h2 className="tc">{title} </h2>
+                    <h1>Loading</h1>
+                </div>
+            )
+        }
+        else if (data.length === 0) {
+            return <h1></h1>;
+        }
+        else {
+
+            const tableHeader = <tr>{Object.keys(data[0]).map((e, i) => {
+                return (
+                    <th key={i}>{e}</th>
+                )
+            })}</tr>;
+
+            const tableRows = data.map((row) => {
+                return (<tr>{Object.values(row).map(e => {
+                    return <td>{e}</td>
+                })}</tr>)
+            })
+
+            return (
+                <div className="table-div">
+                    <h2 className="tc">{title} </h2>
+                    <table className="table">
+                        {tableHeader}
+                        {tableRows}
+                    </table>
+                </div>
+            )
+        }
     }
 
     isObjEmpty = (obj) => {
@@ -150,49 +204,29 @@ export default class CharacterModal extends React.Component {
                         <div>
                             <img className="imgmodal" src={image} alt="" />
                         </div>
-                        <div>
-                            <ul>
-                                <h2>{this.props.item.name}</h2>
+                        <div className="group-info pa5">
+                            <div className="transpose-table">
                                 {
-                                    this.state.species.general === 0 ?
-                                        <li>Loading</li>
-                                        :
-                                        this.renderList(this.state.general)
+                                    this.renderTable(this.state.general, this.props.item.name)
                                 }
-                            </ul>
+                            </div>
+                            <div className="transpose-table">
+                                {
+                                    this.renderTable(this.state.species, "Species")
+                                }
+                            </div>
+                            <div >
+                                {
+                                    this.renderTable(this.state.vehicles, "vehicles")
+                                }
+                            </div>
+                            <div >
+                                {
+                                    this.renderTable(this.state.starships, "starships")
+                                }
+                            </div>
                         </div>
-                        <div>
-                            <ul>
-                                <h2>{"Species"}</h2>
-                                {
-                                    this.state.species.length === 0 ?
-                                        <li>Loading</li>
-                                        :
-                                        this.renderList(this.state.species)
-                                }
-                            </ul>
-                        </div>
-                        <div>
-                            <ul>
-                                <h2>{"vehicles"}</h2>
-                                {
-                                    this.state.vehicles === null ?
-                                        <li>Loading</li>
-                                        :
-                                        this.state.vehicles.map(data => {
-                                            return (
-                                                Object.entries(data).map((info, i) => {
-                                                    return (
-                                                        <li>{info[0].charAt(0).toUpperCase() + info[0].slice(1).replace(/_/g, ' ')}: {info[1]}</li>
-                                                    )
-                                                }))
-                                        })
-                                     
-                                }
 
-
-                            </ul>
-                        </div>
                     </div>
 
 
