@@ -17,7 +17,9 @@ const customStyles = {
         right: 'auto',
         bottom: 'auto',
         marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
+        transform: 'translate(-50%, -50%)',
+        maxHeight: "75vh",
+        maxWidth: "90vw"
     }
 };
 
@@ -34,6 +36,7 @@ export default class CharacterModal extends React.Component {
             homeworld: [],
             vehicles: [],
             starships: [],
+            films: [],
         };
 
         this.openModal = this.openModal.bind(this);
@@ -45,21 +48,55 @@ export default class CharacterModal extends React.Component {
         this.setState({ modalIsOpen: true });
 
         const data = this.props.item;
-        Promise.resolve(this.fetchData(data.species))
+
+        Promise.all(data.species.map(e => this.fetchData(e)))
+            .then(response => response.map(species => {
+                const { name, classification, designation, average_lifespan, language } = species;
+                return {
+                    name,
+                    classification,
+                    designation,
+                    average_lifespan,
+                    language
+                }
+            }))
+            .then(species => this.setState({ species }))
+            .finally(this.state.species.length === 0 && this.setState({ species: null }));
+
+
+
+        Promise.resolve(this.fetchData(data.homeworld))
             .then(e => {
-                const { name, classification, designation, average_lifespan, language } = e;
+                const { name, climate, gravity, terrain, population, } = e;
                 this.setState(
                     {
-                        species: [{
+                        homeworld: [{
                             name,
-                            classification,
-                            designation,
-                            average_lifespan,
-                            language,
+                            climate,
+                            terrain,
+                            gravity,
+                            population,
                         }]
                     }
                 )
-            });
+            }).finally(this.state.homeworld.length === 0 && this.setState({ homeworld: null }));
+
+
+        // Promise.all(data.homeworld.map(e => this.fetchData(e)))
+        //     .then(response => response.map(homeworld => {
+        //         const { name, climate, designation, terrain, gravity, population } = homeworld;
+        //         return {
+        //             name,
+        //             climate,
+        //             designation,
+        //             terrain,
+        //             gravity,
+        //             population
+        //         }
+        //     }))
+        //     .then(homeworld => this.setState({ homeworld }))
+        //     .finally(this.state.homeworld.length === 0 && this.setState({ homeworld: null }));
+
 
         Promise.all(data.vehicles.map(e => this.fetchData(e)))
             .then(response => response.map(vehicle => {
@@ -71,7 +108,8 @@ export default class CharacterModal extends React.Component {
                     crew,
                     passengers
                 }
-            })).then(vehicles => this.setState({ vehicles }))
+            }))
+            .then(vehicles => this.setState({ vehicles }))
             .finally(this.state.vehicles.length === 0 && this.setState({ vehicles: null }));
 
 
@@ -85,21 +123,58 @@ export default class CharacterModal extends React.Component {
                     crew,
                     passengers
                 }
-            })).then(starships => this.setState({ starships }))
+            }))
+            .then(starships => this.setState({ starships }))
             .finally(this.state.starships.length === 0 && this.setState({ starships: null }));
 
+        Promise.all(data.films.map(e => this.fetchData(e)))
+            .then(response => response.map(films => {
+                const { title, episode_id, release_date, producer, director } = films;
+                return {
+                    title,
+                    episode_id,
+                    release_date,
+                    producer,
+                    director
+                }
+            }))
+            .then(films => {
+                films = films.sort(this.compareById);
+                this.setState({ films })
+            })
+            .finally(this.state.films.length === 0 && this.setState({ films: null }));
+        // const fields = ['title'];
+        // this.getRelatedInfo(fields, data.films);
 
-        // const films = data.films.map(e => this.fetchData(e));
-        // Promise.all(films).then(console.log);
 
-        // const starships = data.vehicles.map(e => this.fetchData(e));
-        // Promise.all(starships).then(console.log);
-        // Promise.resolve(this.fetchData(data.homeworld)).then(console.log);
     }
+
+    // getRelatedInfo(fields, type) {
+
+    //     Promise.all(type.map(e => this.fetchData(e)))
+    //         .then(response => response.map(films => {
+    //             const result = films(fields);
+    //             console.log(result)
+    //             return {
+    //                 result
+    //             }
+    //         }))
+    //         .then(type => {
+    //             type = type.sort(this.compareById);
+    //             this.setState({ type })
+    //         })
+    //         .finally(this.state.type.length === 0 && this.setState({ type: null }));
+
+    // }
+
+    compareById(a, b) {
+        return a.episode_id < b.episode_id ? -1 : 1;
+    }
+
 
     afterOpenModal() {
         // references are now sync'd and can be accessed.
-        this.subtitle.style.color = '#f00';
+        // this.subtitle.style.color = '#f00';
     }
 
     closeModal(e) {
@@ -128,18 +203,18 @@ export default class CharacterModal extends React.Component {
         });
     }
 
-    renderList = (data) => {
+    // renderList = (data) => {
 
-        const list = data.map(data => {
-            return (
-                Object.entries(data).map((info, i) => {
-                    return (
-                        <li>{info[0].charAt(0).toUpperCase() + info[0].slice(1).replace(/_/g, ' ')}: {info[1]}</li>
-                    )
-                }))
-        })
-        return list;
-    }
+    //     const list = data.map(data => {
+    //         return (
+    //             Object.entries(data).map((info, i) => {
+    //                 return (
+    //                     <li>{info[0].charAt(0).toUpperCase() + info[0].slice(1).replace(/_/g, ' ')}: {info[1]}</li>
+    //                 )
+    //             }))
+    //     })
+    //     return list;
+    // }
 
     renderTable = (data, title) => {
         if (data === null) {
@@ -156,6 +231,7 @@ export default class CharacterModal extends React.Component {
         else {
 
             const tableHeader = <tr>{Object.keys(data[0]).map((e, i) => {
+                e = e[0].charAt(0).toUpperCase() + e.slice(1).replace(/_/g, ' ');
                 return (
                     <th key={i}>{e}</th>
                 )
@@ -179,10 +255,6 @@ export default class CharacterModal extends React.Component {
         }
     }
 
-    isObjEmpty = (obj) => {
-        return Object.entries(obj).length === 0 && obj.constructor === Object;
-    }
-
     render() {
         const image = this.props.image;
 
@@ -197,34 +269,42 @@ export default class CharacterModal extends React.Component {
                     overlayClassName="Overlay"
                 >
                     <div>
-                        <h2 ref={subtitle => this.subtitle = subtitle}></h2>
+                        <a className="close" onClick={this.closeModal}></a>
                     </div>
 
                     <div className="modal">
                         <div>
-                            <img className="imgmodal" src={image} alt="" />
+                            <img className="imgmodal br4 shadow-5" src={image} alt="" />
                         </div>
-                        <div className="group-info pa5">
-                            <div className="transpose-table">
-                                {
-                                    this.renderTable(this.state.general, this.props.item.name)
-                                }
-                            </div>
-                            <div className="transpose-table">
-                                {
-                                    this.renderTable(this.state.species, "Species")
-                                }
-                            </div>
-                            <div >
-                                {
-                                    this.renderTable(this.state.vehicles, "vehicles")
-                                }
-                            </div>
-                            <div >
-                                {
-                                    this.renderTable(this.state.starships, "starships")
-                                }
-                            </div>
+                        <div className="transpose-table">
+                            {
+                                this.renderTable(this.state.general, this.props.item.name)
+                            }
+                        </div>
+                        <div className="transpose-table">
+                            {
+                                this.renderTable(this.state.species, "Species")
+                            }
+                        </div>
+                        <div className="transpose-table">
+                            {
+                                this.renderTable(this.state.homeworld, "Homeworld")
+                            }
+                        </div>
+                        <div >
+                            {
+                                this.renderTable(this.state.vehicles, "vehicles")
+                            }
+                        </div>
+                        <div >
+                            {
+                                this.renderTable(this.state.starships, "starships")
+                            }
+                        </div>
+                        <div >
+                            {
+                                this.renderTable(this.state.films, "Films")
+                            }
                         </div>
 
                     </div>

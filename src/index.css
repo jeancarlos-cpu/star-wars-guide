@@ -14,3 +14,9 @@ body {
   src: url('./fonts/Starjhol.ttf');
   font-family: "star2"
 }
+
+
+@font-face{
+  src: url('./fonts/Roboto-Regular.ttf');
+  font-family: "roboto"
+}
