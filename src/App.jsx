@@ -30,14 +30,6 @@ class App extends Component {
     next ? this.fetchNext(next) : console.log();
   }
 
-  // async fixOrder(data) {
-  //   data.splice(33, 0, data.pop());
-  //   const ratts = data[72];
-  //   data.splice(72, 1);
-  //   data.splice(45, 0, ratts);
-  //   this.setState({ data });
-  // }
-
   render() {
     return (
       <div>
