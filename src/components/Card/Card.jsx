@@ -19,10 +19,6 @@ export default class Card extends Component {
   render() {
     const { item, index } = this.props;
     const image = require(`../../assets/${index + 1}.jpg`);
-    // let image = [];
-    // index < 16 && index < 35
-    //   ? (image = require(`../../assets/${index + 1}.jpg`))
-    //   : (image = require(`../../assets/${index + 2}.jpg`));
 
     return (
       <div id={index} className="card br4 bb0 grow" onClick={this.handleModal}>
