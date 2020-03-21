@@ -6,7 +6,7 @@ export default function CardList({ data }) {
   return (
     <div className="cardList">
       {data.map((item, index) => (
-        <Card item={item} index={index} />
+        <Card item={item} key={index} index={index} />
       ))}
     </div>
   );

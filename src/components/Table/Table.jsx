@@ -1,6 +1,8 @@
 import React from "react";
+import "./Table.css";
 
 export default function Table({ data, title }) {
+  // console.log(data);
   if (data === null) {
     return (
       <div>
@@ -8,8 +10,8 @@ export default function Table({ data, title }) {
         <h1>Loading</h1>
       </div>
     );
-  } else if (data.length === 0) {
-    return <h1></h1>;
+  } else if (!data || data[0] === undefined) {
+    return <div />;
   } else {
     const tableHeader = (
       <tr>
@@ -22,9 +24,11 @@ export default function Table({ data, title }) {
 
     const tableRows = data.map(row => {
       return (
-        <tr>
+        <tr key={row}>
           {Object.values(row).map(e => {
-            return <td>{e}</td>;
+            console.log(e);
+
+            return <td key={e}>{e}</td>;
           })}
         </tr>
       );
@@ -34,8 +38,10 @@ export default function Table({ data, title }) {
       <div className="table-div">
         <h2 className="tc">{title} </h2>
         <table className="table">
-          {tableHeader}
-          {tableRows}
+          <tbody>
+            {tableHeader}
+            {tableRows}
+          </tbody>
         </table>
       </div>
     );
