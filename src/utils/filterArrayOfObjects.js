@@ -1,4 +1,6 @@
 export default function filterArrayOfObjects(array, keys) {
+  console.log("aaaaa", array, keys);
+
   return array.map(obj =>
     Object.fromEntries(
       keys

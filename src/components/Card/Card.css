@@ -1,29 +1,26 @@
-.card{
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    border: gold solid 1.5px;
-    background: lightgray;
-    width: 160px;
-    margin: 10px 20px;
-    cursor: pointer;
-
+.card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid 1.2px rgba(255, 215, 0, 0.3);
+  border-radius: 13px;
+  background: rgba(211, 211, 211, 0.9);
+  width: 160px;
+  margin: 10px 20px;
+  cursor: pointer;
 }
 
+.name {
+  text-align: center;
+  vertical-align: middle;
+  font-family: "star1";
+  color: black;
+}
 
-.name{
-    text-align: center;
-    vertical-align: middle;
-    font-family: "star1";
-    color: black;
-    }
-
-
-    
 .img {
-    border-top-left-radius: 13px;
-    border-top-right-radius: 13px;
-    width: 100%;
-    height: auto;
-    border-bottom: 2px grey solid;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  width: 100%;
+  height: auto;
+  /* border-bottom: 2px grey solid; */
 }

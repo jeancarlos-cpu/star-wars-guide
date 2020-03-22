@@ -1,15 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import Table from "../Table/Table";
-import "./Modal.css";
-
-/* faltam filmes e naves.
-organizar as naves e os veiculos em tabelas.
-colocar borda na imagem.
-colocar uma animacao no loading.
-mudar a fonte dos itens.
-remover o titulo de veiculo e nave se nao houver.
- */
+import { CloseButton, Container } from "./styles.js";
 
 const customStyles = {
   content: {
@@ -28,36 +20,28 @@ Modal.setAppElement("#root");
 
 export default function CharacterModal(props) {
   const image = props.image;
-
+  console.log(props);
   return (
     <div>
       <Modal
         isOpen={props.isOpen}
         style={customStyles}
         contentLabel="Modal"
-        overlayClassName="Overlay"
+        // overlayClassName="Overlay"
       >
-        <div>
-          <span className="close" onClick={props.closeModal}></span>
-        </div>
+        <CloseButton onClick={props.closeModal} />
 
-        <div className="modal">
+        <Container>
           <div>
-            <img className="imgmodal br4 shadow-5" src={image} alt="" />
+            <img className="br4 shadow-5" src={image} alt="" />
           </div>
-          <div className="transpose-table">
-            <Table data={props.profile} title={props.name} />
-          </div>
-          <div className="transpose-table">
-            <Table data={props.species} title={"Species"} />
-          </div>
-          <div className="transpose-table">
-            <Table data={props.homeworld} title={"Homeworld"} />
-          </div>
+          <Table data={props.profile} title={props.name} transpose={true} />
+          <Table data={props.species} title={"Species"} transpose={true} />
+          <Table data={props.homeworld} title={"Homeworld"} transpose={true} />
           <Table data={props.vehicles} title={"vehicles"} />
           <Table data={props.starships} title={"starships"} />
           <Table data={props.films} title={"Films"} />
-        </div>
+        </Container>
       </Modal>
     </div>
   );

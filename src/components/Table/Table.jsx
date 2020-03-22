@@ -1,7 +1,8 @@
 import React from "react";
-import "./Table.css";
+// import "./Table.css";
+import { Container, Table } from "./styles";
 
-export default function Table({ data, title }) {
+export default function TableComponent({ data, title, transpose }) {
   // console.log(data);
   if (data === null) {
     return (
@@ -26,8 +27,6 @@ export default function Table({ data, title }) {
       return (
         <tr key={row}>
           {Object.values(row).map(e => {
-            console.log(e);
-
             return <td key={e}>{e}</td>;
           })}
         </tr>
@@ -35,15 +34,15 @@ export default function Table({ data, title }) {
     });
 
     return (
-      <div className="table-div">
+      <Container>
         <h2 className="tc">{title} </h2>
-        <table className="table">
+        <Table transpose={transpose}>
           <tbody>
             {tableHeader}
             {tableRows}
           </tbody>
-        </table>
-      </div>
+        </Table>
+      </Container>
     );
   }
 }

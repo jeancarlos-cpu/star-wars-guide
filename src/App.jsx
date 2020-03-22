@@ -7,13 +7,22 @@ import SearchBar from "./components/SearchBar/SearchBar";
 
 const App = function() {
   const [data, setData] = React.useState([]);
-  // const [search, serSearch] = React.useState("");
+  const [input, setInput] = React.useState("");
+
+  const handleChange = function({ target: { value } }) {
+    setInput(value.toLowerCase());
+  };
 
   React.useEffect(() => {
     const fetchPeople = async function(next = "https://swapi.co/api/people/") {
       const response = await fetch(next);
       const { results, next: nextUrl } = await response.json();
-      setData(data => [...data, ...results]);
+      setData(data => {
+        results.forEach(
+          (result, index) => (result.index = data.length + index)
+        );
+        return [...data, ...results];
+      });
       next && fetchPeople(nextUrl);
     };
 
@@ -24,14 +33,16 @@ const App = function() {
     <div>
       <Background />
       <Logo />
-      <SearchBar />
+      <SearchBar handleChange={handleChange} />
       <div>
         {!data.length ? (
           <h1 className="f1 tc white" style={{ fontFamily: "star2" }}>
             Loading...
           </h1>
         ) : (
-          <CardList data={data} />
+          <CardList
+            data={data.filter(data => data.name.toLowerCase().includes(input))}
+          />
         )}
       </div>
     </div>

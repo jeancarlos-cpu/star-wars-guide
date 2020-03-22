@@ -10,18 +10,20 @@ export default function Card({ item, index }) {
   const [vehicles, setVehicles] = React.useState([]);
   const [starships, setStarships] = React.useState([]);
   const [films, setFilms] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
 
-  const image = require(`../../assets/${index + 1}.jpg`);
+  const image = require(`../../assets/${item.index + 1}.jpg`);
 
   async function fetchRelatedInfo(urls, setState, keys) {
     urls = Array.isArray(urls) ? urls : [urls];
-    return await urls.map(async url => {
-      const response = await fetch(url);
-      let data = await response.json();
-      data = Array.isArray(data) ? data : [data];
-      setState(filterArrayOfObjects(data, keys));
-    });
+    let dataArray = await Promise.all(
+      urls.map(async url => {
+        const response = await fetch(url);
+        let data = await response.json();
+        data = Array.isArray(data) ? data : [data];
+        return filterArrayOfObjects(data, keys)[0];
+      })
+    );
+    setState(dataArray);
   }
 
   useEffect(() => {
@@ -80,9 +82,9 @@ export default function Card({ item, index }) {
   }, [item.films, open]);
 
   return (
-    <div id={index} className="card br4 bb0 grow">
+    <div id={index} className="card grow">
       <img className="img" src={image} alt="" onClick={() => setOpen(true)} />
-      <p className="name f5 mv0 pv2 ph3">{item.name + (index + 1)}</p>
+      <p className="name f5 mv0 pv2 ph3">{item.name}</p>
       <CharacterModal
         name={item.name}
         image={image}
