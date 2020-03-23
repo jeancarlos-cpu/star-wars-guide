@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./Card.css";
 import CharacterModal from "../Modal/Modal";
-import filterArrayOfObjects from "../../utils/filterArrayOfObjects";
+import filterObjectByKeys from "../../utils/filterObjectByKeys";
 
 export default function Card({ item, index }) {
   const [open, setOpen] = React.useState(false);
@@ -19,8 +19,7 @@ export default function Card({ item, index }) {
       urls.map(async url => {
         const response = await fetch(url);
         let data = await response.json();
-        data = Array.isArray(data) ? data : [data];
-        return filterArrayOfObjects(data, keys)[0];
+        return filterObjectByKeys(data, keys);
       })
     );
     setState(dataArray);
@@ -95,9 +94,8 @@ export default function Card({ item, index }) {
         vehicles={vehicles}
         starships={starships}
         films={films}
-        profile={filterArrayOfObjects(
-          [item],
-          [
+        profile={[
+          filterObjectByKeys(item, [
             "height",
             "mass",
             "hair_color",
@@ -105,8 +103,8 @@ export default function Card({ item, index }) {
             "eye_color",
             "birth_year",
             "gender"
-          ]
-        )}
+          ])
+        ]}
       />
     </div>
   );

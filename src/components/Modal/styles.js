@@ -26,7 +26,7 @@ export const Container = styled.div`
 export const CloseButton = styled.div`
   float: right;
   opacity: 0.3;
-  position: absolute;
+  position: fixed;
   right: 32px;
   top: 32px;
   width: 32px;

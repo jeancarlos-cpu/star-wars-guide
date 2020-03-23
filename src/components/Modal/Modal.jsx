@@ -20,15 +20,9 @@ Modal.setAppElement("#root");
 
 export default function CharacterModal(props) {
   const image = props.image;
-  console.log(props);
   return (
     <div>
-      <Modal
-        isOpen={props.isOpen}
-        style={customStyles}
-        contentLabel="Modal"
-        // overlayClassName="Overlay"
-      >
+      <Modal isOpen={props.isOpen} style={customStyles} contentLabel="Modal">
         <CloseButton onClick={props.closeModal} />
 
         <Container>

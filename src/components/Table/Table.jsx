@@ -1,17 +1,8 @@
 import React from "react";
-// import "./Table.css";
 import { Container, Table } from "./styles";
 
 export default function TableComponent({ data, title, transpose }) {
-  // console.log(data);
-  if (data === null) {
-    return (
-      <div>
-        <h2 className="tc">{title} </h2>
-        <h1>Loading</h1>
-      </div>
-    );
-  } else if (!data || data[0] === undefined) {
+  if (!data.length) {
     return <div />;
   } else {
     const tableHeader = (
@@ -23,11 +14,11 @@ export default function TableComponent({ data, title, transpose }) {
       </tr>
     );
 
-    const tableRows = data.map(row => {
+    const tableRows = data.map((row, i) => {
       return (
-        <tr key={row}>
-          {Object.values(row).map(e => {
-            return <td key={e}>{e}</td>;
+        <tr key={i}>
+          {Object.values(row).map((e, i) => {
+            return <td key={i}>{e}</td>;
           })}
         </tr>
       );
