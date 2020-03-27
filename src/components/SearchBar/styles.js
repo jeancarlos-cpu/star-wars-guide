@@ -1,12 +1,13 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: inline-block;
   border-radius: 5px;
-  margin: 0 0 25px 25px;
+  /* margin: 0 0 25px 25px; */
   line-height: 40px;
   input {
     border: 10px;
+    border-radius: 4px;
     background: rgba(0, 0, 0, 0.4);
     height: 60px;
     padding: 0 20px;

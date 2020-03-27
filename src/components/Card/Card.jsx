@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import "./Card.css";
-import CharacterModal from "../Modal/Modal";
-import filterObjectByKeys from "../../utils/filterObjectByKeys";
+import React, { useEffect } from 'react';
+import './Card.css';
+import CharacterModal from '../Modal/Modal';
+import filterObjectByKeys from '../../utils/filterObjectByKeys';
 
 export default function Card({ item, index }) {
   const [open, setOpen] = React.useState(false);
@@ -16,7 +16,7 @@ export default function Card({ item, index }) {
   async function fetchRelatedInfo(urls, setState, keys) {
     urls = Array.isArray(urls) ? urls : [urls];
     let dataArray = await Promise.all(
-      urls.map(async url => {
+      urls.map(async (url) => {
         const response = await fetch(url);
         let data = await response.json();
         return filterObjectByKeys(data, keys);
@@ -28,62 +28,62 @@ export default function Card({ item, index }) {
   useEffect(() => {
     open &&
       fetchRelatedInfo(item.species, setSpecies, [
-        "name",
-        "classification",
-        "designation",
-        "average_lifespan",
-        "language"
+        'name',
+        'classification',
+        'designation',
+        'average_lifespan',
+        'language',
       ]);
   }, [item.species, open]);
 
   useEffect(() => {
     open &&
       fetchRelatedInfo(item.homeworld, setHomeworld, [
-        "name",
-        "climate",
-        "terrain",
-        "gravity",
-        "population"
+        'name',
+        'climate',
+        'terrain',
+        'gravity',
+        'population',
       ]);
   }, [item.homeworld, open]);
 
   useEffect(() => {
     open &&
       fetchRelatedInfo(item.vehicles, setVehicles, [
-        "name",
-        "model",
-        "manufacturer",
-        "crew",
-        "passengers"
+        'name',
+        'model',
+        'manufacturer',
+        'crew',
+        'passengers',
       ]);
   }, [item.vehicles, open]);
 
   useEffect(() => {
     open &&
       fetchRelatedInfo(item.starships, setStarships, [
-        "name",
-        "model",
-        "manufacturer",
-        "crew",
-        "passengers"
+        'name',
+        'model',
+        'manufacturer',
+        'crew',
+        'passengers',
       ]);
   }, [item.starships, open]);
 
   useEffect(() => {
     open &&
       fetchRelatedInfo(item.films, setFilms, [
-        "title",
-        "episode_id",
-        "release_date",
-        "producer",
-        "director"
+        'title',
+        'episode_id',
+        'release_date',
+        'producer',
+        'director',
       ]);
   }, [item.films, open]);
 
   return (
-    <div id={index} className="card grow">
-      <img className="img" src={image} alt="" onClick={() => setOpen(true)} />
-      <p className="name f5 mv0 pv2 ph3">{item.name}</p>
+    <div id={index} className='card grow'>
+      <img className='img' src={image} alt='' onClick={() => setOpen(true)} />
+      <p className='name f5 mv0 pv2 ph3'>{item.name}</p>
       <CharacterModal
         name={item.name}
         image={image}
@@ -96,14 +96,14 @@ export default function Card({ item, index }) {
         films={films}
         profile={[
           filterObjectByKeys(item, [
-            "height",
-            "mass",
-            "hair_color",
-            "skin_color",
-            "eye_color",
-            "birth_year",
-            "gender"
-          ])
+            'height',
+            'mass',
+            'hair_color',
+            'skin_color',
+            'eye_color',
+            'birth_year',
+            'gender',
+          ]),
         ]}
       />
     </div>

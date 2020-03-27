@@ -5,19 +5,17 @@ body {
   color: white;
 }
 
-@font-face{
+@font-face {
   src: url('./fonts/Starjedi.ttf');
-  font-family: "star1"
+  font-family: 'star1';
 }
 
-
-@font-face{
+@font-face {
   src: url('./fonts/Starjhol.ttf');
-  font-family: "star2"
+  font-family: 'star2';
 }
 
-
-@font-face{
+@font-face {
   src: url('./fonts/Roboto-Regular.ttf');
-  font-family: "roboto"
+  font-family: 'roboto';
 }
